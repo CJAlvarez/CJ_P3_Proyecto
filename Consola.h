@@ -23,4 +23,5 @@ class Consola {
 
 		string getModelo();
 		double getPrecio();
+		int getSerie();
 };

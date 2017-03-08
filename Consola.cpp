@@ -25,3 +25,7 @@ string Consola::getModelo() {
 double Consola::getPrecio() {
 	return precio;
 }
+
+int Consola::getSerie() {
+	return serie;
+}

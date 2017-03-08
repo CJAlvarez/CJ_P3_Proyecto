@@ -26,4 +26,5 @@ class VideoJuego {
 
 		string getNombre();
 		double getPrecio();
+		int getSerie();
 };

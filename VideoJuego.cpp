@@ -27,3 +27,7 @@ string VideoJuego::getNombre() {
 double VideoJuego::getPrecio() {
 	return precio;
 }
+
+int VideoJuego::getSerie() {
+	return serie;
+}

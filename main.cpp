@@ -20,28 +20,26 @@
 #include "adminArchivos.h"
 
 #include <iostream>
-#include <time.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>	
-#include <unistd.h>
+#include <time.h>
 #include <string>
 #include <vector>
 
 using namespace std;
 
 // Modelos de consolas
-// @param #consola
-// @return vector <"modelo">
-vector <string>* modelos(string);
+// @param empresa
+string modelos(string);
 
 // Agregar, modificar, eliminar
-// @param accion, objeto
-void manipularObjetos(string, string);
+// @param consolas, videoJuegos, accion, objeto
+void manipularObjetos(vector <Consola*>*, vector <VideoJuego*>*, string, string);
 
 // Numeros de serie
-// @param consolas, videoJuegos, objeto
-// @return numero de serie
-int series(vector <Consola*>*, vector <VideoJuego*>*, string);
+// @param consolas, videoJuegos, objeto, numero
+int series(vector <Consola*>*, vector <VideoJuego*>*, string, int);
 
 int main() {
 	vector <Consola*>* consolas = new vector <Consola*>();
@@ -80,7 +78,7 @@ int main() {
 						cout << endl;
 						cout << "Objeto:\n1.-Consola\n2.-VideoJuego\n_ ";
 						getline(cin, objeto);
-						manipularObjetos(accion_Administrador, objeto);
+						manipularObjetos(consolas, videoJuegos, accion_Administrador, objeto);
 						
 					} while(accion_Administrador != "0");
 				} else {
@@ -104,30 +102,87 @@ int main() {
 	return 0;
 }	
 
-void manipularObjetos(string accion, string objeto) {
-	// Datos 
+string modelos(string empresa) {
+	string modelo;
+	cout << "Modelos:" << endl;
+	// Microsoft
+	if(empresa == "1") {
+		cout << "MICROSOFT" << endl;
+		cout << "1.- xbox\n2.- xbox 360\n3.- xbox One" << endl;
+	}
+	// Sony
+	else if(empresa == "2") {
+		cout <<"1.- Play Station 1\n2.- Play Station 2\n3.- Play Station 3\n4.- Play Station 4\n5.- PSP\n6.- PS Vita" << endl;
+	}
+	// Nintendo
+	else if(empresa == "3") {
+		cout << "NINTENDO" << endl;
+		cout << "1.- Nintendo Entertainment System\n2.- Super Nintendo Entertainment System\n3.-Nintendo 64\n4.- Nintendo Gamecube\n";
+		cout << "5.- Nintendo Wii\n6.- Nintendo Wii U\n7.- Nintendo Switch\n8.- Gameboy\n 9.- Gameboy Colors\n10.- Gameboy Advance\n";
+		cout << "11.- Nintendo DS\n12.- Nintendo DSi\n13.- Nintendo 3DS\n14.- Nintendo New 3DS" << endl;
+	}
+	cout << "Modelo: ";
+	getline(cin, modelo);
+	return modelo;
+}
 
+void manipularObjetos(vector <Consola*>* consolas, vector <VideoJuego*>* videoJuegos, string accion, string objeto) {
+	// Datos 
 	int ano, serie, jugadores;
-	string modelo, estado, nombre, consola, genero;
+	string modelo, estado, nombre, consola, genero, empresa;
 	double precio;
 
-	if(objeto == "1") {
-		cout << "Ano de lanzamiento: ";
+	// Consola
+	if(objeto == "1" && (accion == "1" || accion == "2")) {
+		cout << "CONSOLA" << endl;
+		cout << "Año de lanzamiento: ";
+		cin >> ano;
+		cout << "Empresa: ";
+		getline(cin, empresa);
+		cout <<"";
+		modelo = modelos(empresa);
+		cout << "Estado: ";
+		getline(cin, estado);
+		do {
+			cout << "Numero de serie: ";
+			cin >> serie;			
+		} while (series(consolas, videoJuegos, objeto, serie) != 0);	
+		cout << "Precio: ";
+		cin >> precio;
+		// AGREGAR
+		if(accion == "1") {
+			consolas -> push_back(new Consola(ano,modelo, estado, serie, precio));
+		} else {
+			int pos;
+			for (int i = 0; i < consolas -> size(); i++) {
+				cout << i << ".- " << consolas -> at(i) -> getModelo() << endl;
+			}
+			cout << "# de Consola: ";
+			cin >> pos;
+			if(pos >= 0 && pos < consolas -> size()){
+				delete consolas -> at(pos);
+				consolas -> at(pos) = new Consola(ano,modelo, estado, serie, precio);
+			} else {
+				cout << "¡CONSOLA INEXISTENTE!" << endl;
+			}
+		}
+	}
+	// VideoJuego
+	else if(objeto == "2" && (accion == "1" || accion == "2")) {
+		cout << "Nombre";
+		getline(cin, nombre);
+		cout << "Año de lanzamiento: ";
+		cin >> ano;
+		cout << "Consola: ";
+		getline(cin, consola);
+		cout << "Numero de jugadores: ";
+		cin >> jugadores;
+		cout << "Genero: ";
+		getline(cin, genero);
+		cout << "Año de lanzamiento: ";
 		cin >> ano;
 		cout << "Modelo: ";
 		getline(cin, modelo);
-		cout << "Estado: ";
-		getline(cin, estado);
-
-	}
-
-	// AGREGAR
-	if(accion == "1") {
-		
-	}	
-	// MODIFICAR
-	else if(accion == "2") {
-				
 	}
 	// ELIMINAR
 	else if(accion == "3") {
@@ -138,11 +193,25 @@ void manipularObjetos(string accion, string objeto) {
 		cout << "¡ACCION INVALIDA!" << endl;
 	}
 }
-int series(vector <Consola*>* consolas, vector <VideoJuego*>* videoJuegos, string objeto) {
+
+int series(vector <Consola*>* consolas, vector <VideoJuego*>* videoJuegos, string objeto, int serie) {
 	// Consola
 	if(objeto == "1") {
+		for(int i = 0; i < consolas -> size(); i++) {
+			if(serie == consolas -> at(i) -> getSerie()) {
+				return 1;
+			}
+		}
+		return 0;
 
-	} else {
-
+	}
+	// Video Juego
+	else {
+		for(int i = 0; i < videoJuegos -> size(); i++) {
+			if(serie == videoJuegos -> at(i) -> getSerie()) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 }
