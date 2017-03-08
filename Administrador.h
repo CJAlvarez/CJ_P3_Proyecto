@@ -8,7 +8,6 @@ class Administrador : public Usuario {
 		string contrasena;
 
 	public:
-		// @param nombre, contrasena
 		Administrador();
 		
 		// @param nombre, contrasena
