@@ -20,6 +20,10 @@ class Consola {
 
 		// @param modelo
 		virtual int setModelo(string);
+		// @param precio
+		void setPrecio(double);
+		// @param estado
+		void setEstado(string);
 
 		string getModelo();
 		double getPrecio();

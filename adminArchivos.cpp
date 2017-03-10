@@ -7,35 +7,53 @@ adminArchivos::adminArchivos(vector <Consola*>* consolas, vector <VideoJuego*>* 
 }
 
 int adminArchivos::leer() {
-	return 0;
+	try{
+		// CONSOLAS
+		FILE* arch_consola = fopen("consolas.bin", "rb");
+		consolas -> push_back(NULL);	
+		do {
+			fread(consolas -> at(consolas -> size() - 1), sizeof(Consola), 1, arch_consola);
+		} while(!feof(arch_consola));
+		fclose(arch_consola);
+
+		// VIDEOJUEGOS
+		FILE* arch_juego = fopen("videoJuegos.bin", "rb");
+		videoJuegos -> push_back(NULL);	
+		do {
+			fread(videoJuegos -> at(videoJuegos -> size() - 1), sizeof(VideoJuego), 1, arch_juego);
+		} while(!feof(arch_juego));
+		fclose(arch_juego);
+		return 0;
+	} catch(exception e) {
+		cout << "HUBO PROBLEMAS DE LECTURA BINARIA" << endl;
+	}
+		return 1;
 }
 
-int adminArchivos::escribir() {
-	int tamano;
 
-	// CONSOLA
-	stringstream formatoConsola;
-	/* Delimitadores: 
-	$ Compania (M, S, N)
-	 - consola $: M(1, 2, 3), S(1, 2, 3, 4, 5, 6), N(1,..., 14)
-	; elemento
-	
-	for (int i = 0; i < consolas -> size(); ++i){
-		if()
-		formatoConsola << 
-	}*/
-	char cConsola[1000]; //(consolas -> char*) // 
-	strcpy(cConsola, "Prueba");
-	fstream pathConsola("log_ventas/consolas.bin", ios::binary | ios::in | ios::out | ios::trunc);
-	if(!pathConsola.is_open()) {
-		cout << "ERROR_ESCRIBIRCONSOLAS_ADMINARCHIVOS" << endl;
+
+int adminArchivos::escribir() {
+	try {
+		// CONSOLAS
+		FILE* arch_consola = fopen("consolas.bin", "wb");
+		for  (int i = 0; i < consolas -> size(); i++) {
+			// @param &variable, tamaño(objeto), bites, direccion
+			fwrite(consolas -> at(i), sizeof(Consola), 1, arch_consola);
+		}
+		fclose(arch_consola);
+
+		// VIEDOJUEGOS
+		FILE* arch_juego = fopen("videoJuegos.bin", "wb");
+		for  (int i = 0; i < videoJuegos -> size(); i++) {
+			// @param &variable, tamaño(objeto), bites, direccion
+			fwrite(videoJuegos -> at(i), sizeof(VideoJuego), 1, arch_juego);		
+		}
+		fclose(arch_juego);
+		return 0;
+	} catch (exception e) {
+		cout << "HUBO PROBLEMAS DE ESCRITURA BINARIA" << endl;
+	}
 		return 1;
-	}
-	tamano = strlen(cConsola);	
-	for (int i = 0; i < tamano; i++) {
-		pathConsola.put(cConsola[i]);
-	}
-	pathConsola.close();
 }
 
 int adminArchivos::escribir(Venta* venta) {

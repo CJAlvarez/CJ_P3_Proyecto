@@ -2,7 +2,13 @@
 #include "cSony.h"
 
 cSony::cSony(int ano, string modelo, string estado, int serie, double precio) :
-	Consola(ano, modelo, estado, serie, precio) {}
+	Consola(ano, modelo, estado, serie, precio) {
+		while(setModelo(modelo)) {
+		cout << "¡ERROR, DATO INVALIDO!\nIngrese dato nuevamente\n_ ";
+		getline(cin, modelo);
+		cout << modelo << endl;
+		}
+	}
 
 int cSony::setModelo(string modelo) {		
 	if((modelo == "Play Station 1") || (modelo == "Play Station 2") || (modelo == "Play Station 3")

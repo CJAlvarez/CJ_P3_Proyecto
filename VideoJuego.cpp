@@ -1,7 +1,7 @@
 // VideoJuego.cpp
 #include "VideoJuego.h"
 
-VideoJuego::VideoJuego(string nombre, int ano, string consola, int jugadores, string genero, string estado, int serie, double precio)  {
+VideoJuego::VideoJuego(string nombre, int ano, string consola, int jugadores, string genero, string estado, int serie, double getPrecio)  {
 	this -> nombre = nombre;
 	this -> ano = ano;
 	while(setConsola(consola)) {
@@ -16,8 +16,19 @@ VideoJuego::VideoJuego(string nombre, int ano, string consola, int jugadores, st
 }
 
 int VideoJuego::setConsola(string consola) {
-	std::cout << "ERROR_CONSOLA_VIDEOJUEGO(VideoJuego.cpp.16)" << std::endl;
 	return 0;
+}
+
+void VideoJuego::setGenero(string genero) {
+	this -> genero = genero;
+}
+
+void VideoJuego::setPrecio(double precio) {
+	this -> precio = precio;
+}
+
+void VideoJuego::setEstado(string estado) {
+	this -> estado = estado;
 }
 
 string VideoJuego::getNombre() {

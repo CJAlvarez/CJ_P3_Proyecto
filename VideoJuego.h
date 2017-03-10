@@ -23,6 +23,12 @@ class VideoJuego {
 
 		// @param consola
 		virtual int setConsola(string);
+		// @param genero
+		void setGenero(string);
+		// @param precio
+		void setPrecio(double);
+		// @param estado
+		void setEstado(string);
 
 		string getNombre();
 		double getPrecio();

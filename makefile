@@ -1,9 +1,9 @@
 # makefile
 main.exe: main.o Consola.o cMicrosoft.o cNintendo.o cSony.h VideoJuego.o Bandai.o ElectronicArts.o Konami.o Microsoft.o Nintendo.o SEGA.o Sony.o SquareEnix.o Ubisoft.o Usuario.o Administrador.o Vendedor.o Venta.o adminArchivos.o
-	g++ main.o Consola.o cMicrosoft.o cNintendo.o cSony.o VideoJuego.o Bandai.o ElectronicArts.o Konami.o Microsoft.o Nintendo.o SEGA.o Sony.o SquareEnix.o Ubisoft.o Usuario.o Administrador.o Vendedor.o Venta.o adminArchivos.o -o run
+	g++ main.o Consola.o cMicrosoft.o cNintendo.o cSony.o VideoJuego.o Bandai.o ElectronicArts.o Konami.o Microsoft.o Nintendo.o SEGA.o Sony.o SquareEnix.o Ubisoft.o Usuario.o Administrador.o Vendedor.o Venta.o adminArchivos.o -std=c++11 -o run 
 
 main.o: main.cpp Consola.h cMicrosoft.h cNintendo.h cSony.h VideoJuego.h Bandai.h ElectronicArts.h Konami.h Microsoft.h Nintendo.h SEGA.h Sony.h SquareEnix.h Ubisoft.h Usuario.h Administrador.h Vendedor.h Venta.h adminArchivos.h
-	g++ -c main.cpp Consola.cpp cMicrosoft.cpp cNintendo.cpp cSony.cpp VideoJuego.cpp Bandai.cpp ElectronicArts.cpp Konami.cpp Microsoft.cpp Nintendo.cpp SEGA.cpp Sony.cpp SquareEnix.cpp Ubisoft.cpp Usuario.cpp Administrador.cpp Vendedor.cpp Venta.cpp adminArchivos.cpp
+	g++ -c main.cpp Consola.cpp cMicrosoft.cpp cNintendo.cpp cSony.cpp VideoJuego.cpp Bandai.cpp ElectronicArts.cpp Konami.cpp Microsoft.cpp Nintendo.cpp SEGA.cpp Sony.cpp SquareEnix.cpp Ubisoft.cpp Usuario.cpp Administrador.cpp Vendedor.cpp Venta.cpp adminArchivos.cpp -std=c++11
 
 # CONSOLA
 Consola.o: Consola.h Consola.cpp
@@ -64,5 +64,5 @@ Vendedor.o: Vendedor.h Vendedor.cpp Usuario.h
 	g++ -c Vendedor.cpp Usuario.cpp
 
 # ARCHIVOS
-adminArchivos.o: adminArchivos.h adminArchivos.cpp Consola.h VideoJuego.h Vendedor.h Venta.h
-	g++ -c adminArchivos.cpp Consola.cpp VideoJuego.cpp Vendedor.cpp Venta.cpp
+adminArchivos.o: adminArchivos.h adminArchivos.cpp Consola.h cMicrosoft.h cNintendo.h cSony.h VideoJuego.h Bandai.h ElectronicArts.h Konami.h Microsoft.h Nintendo.h SEGA.h Sony.h SquareEnix.h Ubisoft.h Usuario.h Administrador.h Vendedor.h Venta.h 
+	g++ -c Consola.cpp cMicrosoft.cpp cNintendo.cpp cSony.cpp VideoJuego.cpp Bandai.cpp ElectronicArts.cpp Konami.cpp Microsoft.cpp Nintendo.cpp SEGA.cpp Sony.cpp SquareEnix.cpp Ubisoft.cpp Usuario.cpp Administrador.cpp Vendedor.cpp Venta.cpp  -std=c++11
