@@ -7,59 +7,82 @@ adminArchivos::adminArchivos(vector <Consola*>* consolas, vector <VideoJuego*>* 
 }
 
 int adminArchivos::leer() {
-	try{
-		// CONSOLAS
-		FILE* arch_consola = fopen("consolas.bin", "rb");
-		consolas -> push_back(NULL);	
-		do {
-			fread(consolas -> at(consolas -> size() - 1), sizeof(Consola), 1, arch_consola);
-		} while(!feof(arch_consola));
-		fclose(arch_consola);
+	ifstream ifs_C("CONSOLAS/Consolas.bin", ios::binary);
+	boost::archive::polymorphic_binary_iarchive ia_C(ifs_C);	
+	ia_C >> I_C;
 
-		// VIDEOJUEGOS
-		FILE* arch_juego = fopen("videoJuegos.bin", "rb");
-		videoJuegos -> push_back(NULL);	
-		do {
-			fread(videoJuegos -> at(videoJuegos -> size() - 1), sizeof(VideoJuego), 1, arch_juego);
-		} while(!feof(arch_juego));
-		fclose(arch_juego);
-		return 0;
-	} catch(exception e) {
-		cout << "HUBO PROBLEMAS DE LECTURA BINARIA" << endl;
+	for (int i = 0; i < I_C.consolas.size(); i++) {
+		this -> consolas -> push_back(I_C.consolas.at(i));
 	}
-		return 1;
+
+	ifstream ifs_VJ("VIDEOJUEGOS/VideoJuegos.bin", ios::binary);
+	boost::archive::polymorphic_binary_iarchive ia_VJ(ifs_VJ);
+	ia_VJ >> I_VJ;	
+
+	for (int i = 0; i < I_VJ.videoJuegos.size(); i++) {
+		this -> videoJuegos -> push_back(I_VJ.videoJuegos.at(i));
+	}
+	return 0;
 }
 
-
-
 int adminArchivos::escribir() {
-	try {
-		// CONSOLAS
-		FILE* arch_consola = fopen("consolas.bin", "wb");
-		for  (int i = 0; i < consolas -> size(); i++) {
-			// @param &variable, tamaño(objeto), bites, direccion
-			fwrite(consolas -> at(i), sizeof(Consola), 1, arch_consola);
-		}
-		fclose(arch_consola);
-
-		// VIEDOJUEGOS
-		FILE* arch_juego = fopen("videoJuegos.bin", "wb");
-		for  (int i = 0; i < videoJuegos -> size(); i++) {
-			// @param &variable, tamaño(objeto), bites, direccion
-			fwrite(videoJuegos -> at(i), sizeof(VideoJuego), 1, arch_juego);		
-		}
-		fclose(arch_juego);
-		return 0;
-	} catch (exception e) {
-		cout << "HUBO PROBLEMAS DE ESCRITURA BINARIA" << endl;
+	for (int i = 0; i < consolas -> size(); i++) {
+		I_C.append(consolas -> at(i));
 	}
-		return 1;
+	ofstream ofs_C("CONSOLAS/Consolas.bin", ios::binary | ios:: trunc);
+	boost::archive::polymorphic_binary_oarchive oa_C(ofs_C);
+	oa_C << I_C;
+
+	for (int i = 0; i < videoJuegos -> size(); i++) {
+		I_VJ.append(videoJuegos -> at(i));
+	}
+	ofstream ofs_VJ("VIDEOJUEGOS/VideoJuegos.bin", ios::binary);
+	boost::archive::polymorphic_binary_oarchive oa_VJ(ofs_VJ);
+	oa_VJ << I_VJ;	
+	return 0;
 }
 
 int adminArchivos::escribir(Venta* venta) {
-	return 0;	
-}
+	string path = "log_ventas/";
+	path.append(venta -> getFecha());
+	path.append("_");
+	path.append(venta -> getHora());
+	path.append(".log");
+	const char* ruta = path.c_str();
+	//stringstream ss;
+	//ss << ruta;
+	//cout << ruta << endl;	
+	ofstream file;
+	file.open(ruta, ios::out);
 
-int adminArchivos::escribir(Vendedor* vendedor) {
+	if(file.fail()) {
+		std::cout << "Open_File_Error" << std::endl;
+		return -1;
+	}	
+	file << venta -> toStringF(consolas, videoJuegos);	
+	file.close();	
+	//delete[] ruta;	
 	return 0;
 }
+
+
+int adminArchivos::escribir(Vendedor* vendedor) {
+	string path = "usuarios_log/";
+	path.append(vendedor -> getNombre());
+	path.append("_");
+	path.append(vendedor -> getFecha());
+	path.append(".log");
+	const char* ruta = path.c_str();
+	ofstream file;
+	file.open(ruta, ios::out);
+
+	if(file.fail()) {
+		std::cout << "Open_File_Error" << std::endl;
+		return -1;
+	}
+	file << vendedor -> toStringF();
+	file.close();
+	//delete[] ruta;	
+	return 0;
+}
+

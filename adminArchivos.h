@@ -19,6 +19,8 @@
 #include "Usuario.h"
 #include "Administrador.h"
 #include "Vendedor.h"
+#include "Inventario_Consola.cpp"
+#include "Inventario_VideoJuego.cpp"
 
 #include <exception>
 #include <iostream>
@@ -27,8 +29,15 @@
 #include <fstream>
 #include <string>
 #include <typeinfo>
-//#include <cstring.h>
 #include <sstream>
+
+#include <boost/serialization/vector.hpp>
+
+#include <boost/serialization/base_object.hpp> // TODOS
+#include <boost/serialization/assume_abstract.hpp>
+
+#include <boost/archive/polymorphic_binary_iarchive.hpp> // Carga
+#include <boost/archive/polymorphic_binary_oarchive.hpp> // Guarda
 
 using namespace std;
 
@@ -36,8 +45,11 @@ class adminArchivos {
 	private:
 		vector <Consola*>* consolas;
 		vector <VideoJuego*>* videoJuegos;
+		Inventario_Consola I_C;
+		Inventario_VideoJuego I_VJ;
 
 	public:
+		adminArchivos();
 		// @param consolas, videoJuegos
 		adminArchivos(vector <Consola*>*, vector <VideoJuego*>*);
 
@@ -47,5 +59,3 @@ class adminArchivos {
 		int escribir(Vendedor*);
 		
 };
-
-// Leer todo en char* y luego validarlo de ahi

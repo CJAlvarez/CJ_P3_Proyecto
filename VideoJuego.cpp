@@ -1,5 +1,6 @@
 // VideoJuego.cpp
 #include "VideoJuego.h"
+VideoJuego::VideoJuego() {}
 
 VideoJuego::VideoJuego(string nombre, int ano, string consola, int jugadores, string genero, string estado, int serie, double getPrecio)  {
 	this -> nombre = nombre;
@@ -42,3 +43,4 @@ double VideoJuego::getPrecio() {
 int VideoJuego::getSerie() {
 	return serie;
 }
+

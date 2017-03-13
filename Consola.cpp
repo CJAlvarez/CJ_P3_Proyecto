@@ -1,5 +1,8 @@
 // Consola.cpp
 #include "Consola.h"
+Consola::Consola() {
+	ano = serie = precio = 0;
+}
 
 Consola::Consola(int ano, string modelo, string estado, int serie, double precio) {
 	this -> ano = ano;	
@@ -31,3 +34,12 @@ double Consola::getPrecio() {
 int Consola::getSerie() {
 	return serie;
 }
+
+int Consola::getAno() {
+	return ano;
+}
+
+string Consola::getEstado() {
+	return estado;
+}
+

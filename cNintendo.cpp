@@ -1,6 +1,6 @@
 // cNintendo.cpp
 #include "cNintendo.h"
-
+cNintendo::cNintendo(){}
 cNintendo::cNintendo(int ano, string modelo, string estado, int serie, double precio) :
 	Consola(ano, modelo, estado, serie, precio) {
 		while(setModelo(modelo)) {
@@ -16,7 +16,7 @@ int cNintendo::setModelo(string modelo) {
 	|| (modelo == "Nintendo Wii U") || (modelo == "Nintendo Switch") || (modelo == "Gameboy")
 	|| (modelo == "Gameboy Colors") || (modelo == "Gameboy Advance") || (modelo == "Nintendo DS")
 	|| (modelo == "Nintendo DSi") || (modelo == "Nintendo 3DS") || (modelo == "Nintendo New 3DS")){
-		this -> modelo = modelo;			
+		this -> modelo = modelo;
 		return 0;
 	}
 	return 1;

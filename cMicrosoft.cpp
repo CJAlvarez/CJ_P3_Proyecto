@@ -1,6 +1,6 @@
 // cMirosoft.cpp
 #include "cMicrosoft.h" 
-
+cMicrosoft::cMicrosoft(){}
 cMicrosoft::cMicrosoft(int ano, string modelo, string estado, int serie, double precio) :
 	Consola(ano, modelo, estado, serie, precio) {
 		while(setModelo(modelo)) {

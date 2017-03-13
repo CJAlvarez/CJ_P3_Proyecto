@@ -27,7 +27,7 @@
 #include <time.h>
 #include <string>
 #include <vector>
-#include <type_traits>
+#include <typeinfo>
 
 using namespace std;
 
@@ -46,12 +46,10 @@ int series(vector <Consola*>*, vector <VideoJuego*>*, int, int);
 int main() {
 	vector <Consola*>* consolas = new vector <Consola*>();
 	vector <VideoJuego*>* videoJuegos = new vector <VideoJuego*>();
-	adminArchivos ARCHIVOS(consolas, videoJuegos);
-	cout << ARCHIVOS.leer() << endl;
-
+	adminArchivos* ARCHIVOS = new adminArchivos(consolas, videoJuegos);
+	ARCHIVOS -> leer();	
 	Administrador* administrador = new Administrador();
-	int accion_Menu1;
-
+	int accion_Menu1;	
 	cout << "" << endl << "\t\t¡BIENVENIDO!" << endl;
 	do {		
 		cout << endl <<  "Elija accion:" << endl << "1.- Inciar Administrador" << endl << "2.- Inciar Vendedor" << endl << "0.- Salir del sistema" << endl << "_ ";
@@ -81,8 +79,12 @@ int main() {
 						if(accion_Administrador == 0) {
 							break;
 						}
+						if(accion_Administrador > 3 || accion_Administrador < 0) {
+							cout << "¡ACCION INVALIDA" << endl;
+							continue;
+						}
 						cout << endl;
-						cout << "Objeto:" << endl << "1.-Consola" << endl << "2.-VideoJuego" << endl << "_ ";
+							cout << "Objeto:" << endl << "1.-Consola" << endl << "2.-VideoJuego" << endl << "_ ";
 						cin >> objeto;
 						try {
 							manipularObjetos(consolas, videoJuegos, accion_Administrador, objeto);
@@ -102,32 +104,142 @@ int main() {
 		// SESION VENDEDOR
 		else if(accion_Menu1 == 2) {
 			Vendedor* vendedor;
+			Venta* venta;
 			string nombre;
 			cout << "VENDEDOR" << endl;
 			cout << "Nombre: ";
+			cin.ignore();
 			getline(cin, nombre);
 			vendedor = new Vendedor(nombre);
 			int accion_vendedor;
+			int vender_mas;
 			do{
-				cout << endl << "1.- Vender Consola" << endl << "2.- Vender VideoJuego" << endl << "0.- Cerrar Sesion" << endl << "_ ";
-				cin >> accion_vendedor;
-
-				if (accion_vendedor == 1) {
-
-				} else if(accion_vendedor == 2) {
-
-				} else if(accion_vendedor != 0){
-
-				}
-
-			} while(accion_vendedor != 0);
+				// Trabajo				
+				string cliente;
+				cout << "Cliente: ";								
+				getline(cin, cliente);
+				do{
+					// Atender
+					cout << endl << "1.- Vender Consola" << endl << "2.- Vender VideoJuego" << endl << "0.- Terminar venta" << endl << "_ ";
+					cin >> accion_vendedor;					
+					if (accion_vendedor == 1) {
+						venta = new Venta(vendedor -> getNombre(), cliente);
+						int empresa;
+						int modelo;
+	
+						cout << "CONSOLA"<< endl;
+						cout << "1.-Microsoft" << endl << "2.-Sony" << endl << "3.- Nintendo" << endl << "_ ";
+						cin >> empresa;
+						// Microsoft
+						if(empresa == 1) {						
+							cout << "MODELO" << endl;
+							string Microsoft_M[3] = {"xbox", "xbox 360", "xbox One"};
+							do{
+								cout << "1.- xbox" << endl << "2.- xbox 360" << endl << "3.- xbox One" << endl;
+								cin >> modelo;
+							} while(modelo < 1 || modelo > 3);							
+							for (int i = 0; i < consolas -> size(); i++) {
+								if(typeid(consolas -> at(i)) == typeid(cMicrosoft*)) {
+									if( consolas -> at(i) -> getModelo() == Microsoft_M[modelo-1]) {
+										venta -> getConsolas() -> push_back(i);	
+										break;																			
+									}
+								} 
+							}
+	
+						}
+						// Sony
+						else if(empresa == 2) {
+							string Sony_M[6] = {"Play Station 1", "Play Station 2", "Play Station 3", "Play Station 4", "PSP", "PS Vita"};
+							do{
+								cout << "1.-Play Station 1" << endl << "2.-Play Station 2" << endl << "3.-Play Station 3" << endl << "4.- Play Station 4" << endl << "5.-PSP" << endl <<  "6.-PS Vita" << endl << "_ ";
+								cin >> modelo;
+							} while(modelo < 1 || modelo > 6);
+							for (int i = 0; i < consolas -> size(); i++) {
+								if(typeid(consolas -> at(i)) == typeid(cSony*)) {
+									if(consolas -> at(i) -> getModelo() == Sony_M[modelo-1]) {
+										venta -> getConsolas() -> push_back(i);
+										break;
+									}
+								}
+							}
+						}
+						// Nintendo
+						else if(empresa == 3) {
+							string Nintendo_M[14] = {"Nintendo Entertainment System", "Super Nintendo Entertainment System", "Nintendo 64", "Nintendo Gamecube",
+								"Nintendo Wii", "Nintendo Wii U", "Nintendo Switch", "Gameboy", " Gameboy Colors", "Gameboy Advance",
+								"Nintendo DS", "Nintendo DSi", "Nintendo 3DS", "Nintendo New 3DS"};
+							do{
+								cout << "1.- Nintendo Entertainment System" << endl << "2.- Super Nintendo Entertainment System" << endl << "3.- Nintendo 64" << endl << "4.- Nintendo Gamecube" << endl << "";
+								cout << "5.- Nintendo Wii" << endl << "6.- Nintendo Wii U" << endl << "7.- Nintendo Switch" << endl << "8.- Gameboy" << endl << "9.- Gameboy Colors" << endl << "10.- Gameboy Advance" << endl << "";
+								cout << "11.- Nintendo DS" << endl << "12.- Nintendo DSi" << endl << "13.- Nintendo 3DS" << endl << "14.- Nintendo New 3DS" << endl << "_ ";
+								cin >> modelo;
+							} while(modelo < 1 || modelo > 14);
+							for (int i = 0; i < consolas -> size(); i++) {
+								if(typeid(consolas -> at(i)) == typeid(cNintendo*)) {
+									if(consolas -> at(i) -> getModelo() == Nintendo_M[modelo-1]) {
+										venta -> getConsolas() -> push_back(i);
+										break;
+									}
+								} 
+							}
+						}
+						// otro
+						else{
+							cout << "INVALIDO" << endl;
+						}
+					} else if(accion_vendedor == 2) {
+						int juego;
+						cout << "VIDEOJUEGOS" << endl;
+						do {
+							for (int i = 0; i < videoJuegos -> size() ; i++){
+								cout << i << ".- " << videoJuegos -> at(i) -> getNombre() << endl;
+							}
+							cin >> juego;
+						} while (juego < 1 || juego > videoJuegos -> size());
+						venta -> getVideoJuegos() -> push_back(juego -1);						
+					} else if(accion_vendedor != 0){
+						cout << "INVALIDO" << endl;
+					}
+	
+				} while(accion_vendedor != 0);
+					try{						
+						ARCHIVOS -> escribir(venta);						
+						for(int i = 0; i < venta -> getConsolas() -> size(); i++) {					
+							delete consolas -> at(venta -> getConsolas() -> at(i));
+							consolas -> erase(consolas -> begin() + venta -> getConsolas() -> at(i) -1);
+						}						
+						for(int i = 0; i < venta -> getVideoJuegos() -> size(); i++) {
+							delete videoJuegos -> at(venta -> getVideoJuegos() -> at(i));
+							videoJuegos -> erase(videoJuegos -> begin() + venta -> getVideoJuegos() -> at(i) -1);
+						}						
+					} catch(exception e) {
+						cout << "ERROR VENTA"<< endl;
+					}
+				cout << "Ingrese 0 para seguir como Vendedor, u otro para Cerrar Sesion" << endl << "_ ";
+				cin >> vender_mas;
+			} while(vender_mas == 0);
+			try{
+				ARCHIVOS -> escribir(vendedor);
+			} catch(exception e) {
+				cout << "ERROR_VENDEDOR" << endl;
+			}			
 			delete vendedor;
 		} 
 		// OTRO		
 		else if (accion_Menu1 != 0) {
 			cout << "¡ACCION INVALIDA!" << endl;
 		}
-	cin.ignore(); } while(accion_Menu1 != 0);
+	cin.ignore(); } while(accion_Menu1 != 0);	
+	ARCHIVOS -> escribir();
+	// CONSOLAS	
+	delete consolas;	
+	consolas -> clear();	
+	// VIEDOJUEGOS		
+	delete videoJuegos;	
+	videoJuegos -> clear();	
+	delete administrador;
+	delete ARCHIVOS;	
 	cout << "¡HASTA PRONTO!" << endl;
 	return 0;
 }	
@@ -163,8 +275,8 @@ string modelos_Consola(int empresa) {
 	// Nintendo
 	else if(empresa == 3) {
 		cout << "NINTENDO" << endl;
-		cout << "1.- Nintendo Entertainment System" << endl << "2.- Super Nintendo Entertainment System" << endl << "3.-Nintendo 64" << endl << "4.- Nintendo Gamecube" << endl << "";
-		cout << "5.- Nintendo Wii" << endl << "6.- Nintendo Wii U" << endl << "7.- Nintendo Switch" << endl << "8.- Gameboy" << endl << " 9.- Gameboy Colors" << endl << "10.- Gameboy Advance" << endl << "";
+		cout << "1.- Nintendo Entertainment System" << endl << "2.- Super Nintendo Entertainment System" << endl << "3.- Nintendo 64" << endl << "4.- Nintendo Gamecube" << endl << "";
+		cout << "5.- Nintendo Wii" << endl << "6.- Nintendo Wii U" << endl << "7.- Nintendo Switch" << endl << "8.- Gameboy" << endl << "9.- Gameboy Colors" << endl << "10.- Gameboy Advance" << endl << "";
 		cout << "11.- Nintendo DS" << endl << "12.- Nintendo DSi" << endl << "13.- Nintendo 3DS" << endl << "14.- Nintendo New 3DS" << endl;
 		do {
 			cout << "Modelo: ";
@@ -191,8 +303,7 @@ void manipularObjetos(vector <Consola*>* consolas, vector <VideoJuego*>* videoJu
 			cin >> ano;
 
 			cout << "Estado: ";								
-			getline(cin.ignore(), estado);
-			cout  << estado << "¡*" << endl;
+			getline(cin.ignore(), estado);			
 			do {
 				cout << "Numero de serie: ";
 				cin >> serie;			
@@ -249,7 +360,7 @@ void manipularObjetos(vector <Consola*>* consolas, vector <VideoJuego*>* videoJu
 				cout << "8.- SEGA" << endl << "9.- Ubisoft" << endl << "_ ";
 				cin >> empresa;			
 			} while(empresa < 1 || empresa > 9);	
-			consola = empresas[empresa];
+			consola = empresas[empresa - 1];
 			switch (empresa) {
 				case 1:{
 					videoJuegos -> push_back(new Microsoft(nombre, ano, consola, jugadores, genero, estado, serie, precio));
@@ -321,7 +432,7 @@ void manipularObjetos(vector <Consola*>* consolas, vector <VideoJuego*>* videoJu
 				consolas -> at(pos) -> setEstado(estado);
 			} else {
 				cout << "ELIMINAR" << endl;
-				consolas -> erase(consolas -> begin() + pos);
+				consolas -> erase(consolas -> begin() + pos-1);
 			}
 
 		} 
@@ -353,7 +464,7 @@ void manipularObjetos(vector <Consola*>* consolas, vector <VideoJuego*>* videoJu
 				videoJuegos -> at(pos) -> setGenero(genero);
 			} else {
 				cout << "ELIMINAR" << endl;
-				videoJuegos -> erase(videoJuegos -> begin() + pos);
+				videoJuegos -> erase(videoJuegos -> begin() + pos-1);
 			}
 
 		} else {

@@ -15,6 +15,7 @@ class Vendedor : public Usuario {
 		string getHora();
 
 	public:
+		Vendedor();
 		// @param nombre
 		Vendedor(string);
 
@@ -28,4 +29,6 @@ class Vendedor : public Usuario {
 		double getDineroGenerado();
 		string getEntrada();
 		string getSalida();		
+		string getFecha();
+		string toStringF();
 };

@@ -1,12 +1,12 @@
 // cSony.cpp
 #include "cSony.h"
-
+cSony::cSony(){}
 cSony::cSony(int ano, string modelo, string estado, int serie, double precio) :
 	Consola(ano, modelo, estado, serie, precio) {
 		while(setModelo(modelo)) {
-		cout << "¡ERROR, DATO INVALIDO!\nIngrese dato nuevamente\n_ ";
-		getline(cin, modelo);
-		cout << modelo << endl;
+			cout << "¡ERROR, DATO INVALIDO!\nIngrese dato nuevamente\n_ ";
+			getline(cin, modelo);
+			cout << modelo << endl;
 		}
 	}
 

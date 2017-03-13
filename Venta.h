@@ -1,6 +1,24 @@
 // Venta.h
 #pragma once
 
+#include "Consola.h"
+#include "cMicrosoft.h"
+#include "cNintendo.h"
+#include "cSony.h"
+#include "VideoJuego.h"
+#include "Bandai.h"
+#include "ElectronicArts.h"
+#include "Konami.h"
+#include "Microsoft.h"
+#include "Nintendo.h"
+#include "SEGA.h"
+#include "Sony.h"
+#include "SquareEnix.h"
+#include "Ubisoft.h"
+#include "Usuario.h"
+#include "Administrador.h"
+#include "Vendedor.h"
+
 #include <ctime>
 #include <iostream>
 #include <string>
@@ -10,7 +28,7 @@
 using namespace std;
 
 class Venta {
-	private:
+	private:	
 		string cliente;
 		vector <int>* consolas;
 		vector <int>* juegos;
@@ -21,6 +39,7 @@ class Venta {
 		double total;	
 
 	public:
+		Venta();
 		// vendedor, cliente
 		Venta(string, string);
 
@@ -32,4 +51,5 @@ class Venta {
 		string getHora();
 		double getSubTotal();		
 		int getCantidadArticulos();
+		string toStringF(vector <Consola*>*, vector <VideoJuego*>*);
 };
